@@ -16,10 +16,10 @@ export default class Nav extends React.Component<INavProps, INavState> {
     return (
       <nav className="navbar navbar-inverse">
       <div className="container-fluid">
-      <ul className="nav navbar-nav">
-        <li><Link to="/">Chirps</Link></li>
-        <li><Link to="">Add Chrips</Link></li>
-        </ul>
+      
+        <Link to="/" className="btn btn-outline-success mt-5 mx-5 mb-5">Chirps</Link>
+        <Link to="/" className="btn btn-outline-success mt-5 mx-5 mb-5">Add Chrips</Link>
+        
       </div>
     </nav>
     );

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 
 export default class Card extends React.Component<ICardProps, ICardState> {
@@ -37,7 +38,7 @@ render() {
                   <div className="card-body">
                     <h4 className="card-title">{chirp.user}</h4>
                     <p className="card-text">{chirp.text}</p>
-                    <button className="btn btn-primary">Admin</button>
+                    <Link className="btn btn-outline-success" to="">Admin</Link>
                   </div>
                 </div>
               </div>

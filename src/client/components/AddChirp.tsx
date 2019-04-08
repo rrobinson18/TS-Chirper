@@ -1,4 +1,6 @@
 import React from 'react';
+import Card from './Card';
+import { Link } from 'react-router-dom';
 
 
 export default class AddChirp extends React.Component<IAddChirpProps, IAppChirpState> {
@@ -34,19 +36,24 @@ render() {
                     <form className="form-group p-3 border border-warning rounded">
                         <label>Username: </label>
                         <input
-                            value={this.state.user}
+                            value={this.state.chirps}
                             onChange={ this.handleUser}
                             className="p-1 form-control"
                             placeholder="Your username ..." />
                         <label>Chat Message: </label>
                         <input
-                            value={this.state.text}
+                            value={this.state.chirps}
                             onChange={ this.handleMessageChange }
                             className="p-1 form-control"
                             placeholder="Type here ..." />
-                        <button onSubmit={ this.handleClickSubmit } className="btn btn-lg btn-outline-warning mt-2">Chat!</button>
+                        <Link onSubmit={ this.handleClickSubmit } className="btn btn-lg btn-outline-warning mt-2">Chat!</Link>
                     </form>
                 </div>
+            </div>
+            <div className="row">
+            {this.state.chirps.map((chat, index) => {
+                return <Card key={} chat={chat}></Card>
+            })}
             </div>
         </div>
         );
@@ -61,8 +68,8 @@ render() {
 
     interface IAppChirpState{
         chirps: {
-            id: string;
-            user: string;
-            text: string
+            'id': string;
+            'user': string;
+            'text': string
         }[];
     }
