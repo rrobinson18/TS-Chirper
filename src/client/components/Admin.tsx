@@ -12,6 +12,16 @@ export default class Admin extends React.Component<IAdminProps, IAdminState> {
         }
     }
 
+    async ComponentDidMount {
+        try {
+            let r = await fetch(`/api/chirps/${this.props.match.params.id}`);
+            let chirp: { text: string, user: string } = await r.json();
+            this.setState({text: chirp.text, user: chirp.user});
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     handleMessageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         this.setState({ text: e.target.value });
     }
@@ -21,12 +31,12 @@ export default class Admin extends React.Component<IAdminProps, IAdminState> {
         this.setState({ user: e.target.value });
     }
 
-    handleClickSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    handleEdit = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         let body = { user: this.state.user, text: this.state.text };
         try {
-            await fetch('/api/chirps/', {
-                method: 'POST',
+            await fetch(`/api/chirps/${this.props.match.params.id}`, {
+                method: 'PUT',
                 body: JSON.stringify(body),
                 headers: {
                     "Content-type": "application/json"
@@ -37,7 +47,20 @@ export default class Admin extends React.Component<IAdminProps, IAdminState> {
             console.log(error);
         }
         this.setState({ text: "", user: "" });
-    }    
+    }   
+
+    handleDelete = async (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        try {
+            await fetch(`/api/chirps/${this.props.match.params.id}`, {
+                method: 'DELETE',
+            });
+            this.props.history.push('/');
+        } catch (error) {
+            console.log(error);
+        }
+        this.setState({ text: "", user: "" }); 
+    }
     
 render() {
     return (
@@ -58,8 +81,8 @@ render() {
                             onChange={ this.handleMessageChange }
                             className="p-1 form-control"
                             placeholder="Type here ..." />
-                        <button onClick={ this.handleClickSubmit } className="btn btn-lg btn-outline-warning mt-2">Save Edit!</button>
-                        <button onClick={ this.handleClickSubmit } className="btn btn-lg btn-danger mt-2">Delete!</button>
+                        <button onClick={ this.handleEdit } className="btn btn-lg btn-warning mt-2">Save Edit!</button>
+                        <button onClick={ this.handleDelete } className="btn btn-lg btn-danger mt-2">Delete!</button>
                     </form>
                 </div>
             </div>
