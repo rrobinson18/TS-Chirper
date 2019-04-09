@@ -1,6 +1,5 @@
 import React from 'react';
-import Card from './Card';
-import { Link } from 'react-router-dom';
+import { RouteComponentProps } from 'react-router-dom';
 
 
 export default class AddChirp extends React.Component<IAddChirpProps, IAppChirpState> {
@@ -8,7 +7,8 @@ export default class AddChirp extends React.Component<IAddChirpProps, IAppChirpS
         super(props);
 
         this.state = {
-            chirps: []
+            text: '',
+            user: ''
         }
     }
 
@@ -21,13 +21,24 @@ export default class AddChirp extends React.Component<IAddChirpProps, IAppChirpS
         this.setState({ user: e.target.value });
     }
 
-    handleClickSubmit = (e: React.ChangeEvent<HTMLInputElement>) => {
+    handleClickSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        this.setState({ chirps: [], text: "", user: "" });
+        let body = { user: this.state.user, text: this.state.text };
+        try {
+            await fetch('/api/chirps/', {
+                method: 'POST',
+                body: JSON.stringify(body),
+                headers: {
+                    "Content-type": "application/json"
+                }
+            });
+            this.props.history.push('/');
+        } catch (error) {
+            console.log(error);
+        }
+        this.setState({ text: "", user: "" });
     }    
     
-
- 
 render() {
     return (
         <div className="container">
@@ -36,24 +47,19 @@ render() {
                     <form className="form-group p-3 border border-warning rounded">
                         <label>Username: </label>
                         <input
-                            value={this.state.chirps}
+                            value={this.state.user}
                             onChange={ this.handleUser}
                             className="p-1 form-control"
                             placeholder="Your username ..." />
                         <label>Chat Message: </label>
                         <input
-                            value={this.state.chirps}
+                            value={this.state.text}
                             onChange={ this.handleMessageChange }
                             className="p-1 form-control"
                             placeholder="Type here ..." />
-                        <Link onSubmit={ this.handleClickSubmit } className="btn btn-lg btn-outline-warning mt-2">Chat!</Link>
+                        <button onClick={ this.handleClickSubmit } className="btn btn-lg btn-outline-warning mt-2">Chat!</button>
                     </form>
                 </div>
-            </div>
-            <div className="row">
-            {this.state.chirps.map((chat, index) => {
-                return <Card key={} chat={chat}></Card>
-            })}
             </div>
         </div>
         );
@@ -62,14 +68,11 @@ render() {
 
 
 
-    interface IAddChirpProps{
+    interface IAddChirpProps extends RouteComponentProps{
        
     }
 
     interface IAppChirpState{
-        chirps: {
-            'id': string;
-            'user': string;
-            'text': string
-        }[];
+        text: string;
+        user: string;
     }

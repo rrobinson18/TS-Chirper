@@ -1,6 +1,5 @@
 import React from 'react';
-import { text } from 'body-parser';
-
+import { RouteComponentProps } from 'react-router-dom';
 
 
 export default class Admin extends React.Component<IAdminProps, IAdminState> {
@@ -8,11 +7,11 @@ export default class Admin extends React.Component<IAdminProps, IAdminState> {
         super(props);
 
         this.state = {
-            chirps: []
+            text: '',
+            user: ''
         }
-    }  
+    }
 
-    
     handleMessageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         this.setState({ text: e.target.value });
     }
@@ -22,50 +21,58 @@ export default class Admin extends React.Component<IAdminProps, IAdminState> {
         this.setState({ user: e.target.value });
     }
 
-    handleClickSubmit = (e: React.ChangeEvent<HTMLInputElement>) => {
+    handleClickSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        this.setState({ chirps: [], text: "", user: "" });
+        let body = { user: this.state.user, text: this.state.text };
+        try {
+            await fetch('/api/chirps/', {
+                method: 'POST',
+                body: JSON.stringify(body),
+                headers: {
+                    "Content-type": "application/json"
+                }
+            });
+            this.props.history.push('/');
+        } catch (error) {
+            console.log(error);
+        }
+        this.setState({ text: "", user: "" });
     }    
-
-
-async componentWillMount() {
-    let data = {user: name, text: text};
-    fetch(`/api/chirps/${this.props}`, {
-        method: 'POST',
-        body: JSON.stringify(data)
     
-    }).then(res => res.json())
-    .then(response => console.log('Success:', JSON
-    .stringify(response)))
-    .catch(error => console.error('Error:', error));
-}
-
 render() {
-    return(
+    return (
         <div className="container">
-        <div className="row my-2">
-            <div className="col-md-12">
-                <form className="form-group p-3 border border-warning rounded">
-                    <label>Edit Username: </label>
-                    <input value={this.state.user} onChange={ this.handleUser} className="p-1 form-control" placeholder="Edit username ..." />
-                    <label>Edit Message: </label>
-                    <input value={this.state.text} onChange={ this.handleMessageChange } className="p-1 form-control" placeholder="Type here ..." />
-                    <button onSubmit={ this.handleClickSubmit } className="btn btn-lg btn-outline-warning mt-2">Save Edit</button>
-                    <button onSubmit={ this.handleClickSubmit } className="btn btn-lg btn-outline-warning mt-2">Delete</button>
-                </form>
+            <div className="row my-2">
+                <div className="col-md-12">
+            <h4 className="text-center">Admin for Chirp {this.props.match.params.id}</h4>
+                    <form className="form-group p-3 border border-warning rounded">
+                        <label>Username: </label>
+                        <input
+                            value={this.state.user}
+                            onChange={ this.handleUser}
+                            className="p-1 form-control"
+                            placeholder="Your username ..." />
+                        <label>Chat Message: </label>
+                        <input
+                            value={this.state.text}
+                            onChange={ this.handleMessageChange }
+                            className="p-1 form-control"
+                            placeholder="Type here ..." />
+                        <button onClick={ this.handleClickSubmit } className="btn btn-lg btn-outline-warning mt-2">Save Edit!</button>
+                        <button onClick={ this.handleClickSubmit } className="btn btn-lg btn-danger mt-2">Delete!</button>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
-    )
+        );
+    }   
 }
 
-}
 
 
-interface IAdminProps {
+    interface IAdminProps extends RouteComponentProps<{ id: string; }> { }
 
-}
-
-interface IAdminState {
-    chirps:{ id: string; user: string; text: string }[];
-}
+    interface IAdminState {
+        user: string;
+        text: string;
+    }

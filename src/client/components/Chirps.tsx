@@ -11,21 +11,18 @@ export default class Card extends React.Component<ICardProps, ICardState> {
     }; 
 }
 
-async componentWillMount() {
+async componentDidMount() {
     let r = await fetch("/api/chirps");
     let data = await r.json();
-    let chirps = Object.keys(data).map(key => {
-      return {
+    let chirps = Object.keys(data).map(key => ({
         id: key,
         user: data[key].user,
-        text: data[key].text
-      };
-    });
+        text: data[key].text     
+      }));
     chirps.pop();
     chirps.reverse();
     this.setState({ chirps });
   }
-
 
 render() {
     return (
@@ -38,7 +35,7 @@ render() {
                   <div className="card-body">
                     <h4 className="card-title">{chirp.user}</h4>
                     <p className="card-text">{chirp.text}</p>
-                    <Link className="btn btn-outline-success" to="">Admin</Link>
+                    <Link className="btn btn-outline-success" to={`/${chirp.id}/admin`}>Admin</Link>
                   </div>
                 </div>
               </div>
@@ -46,7 +43,7 @@ render() {
           })}
         </div>
       </main>
-    )
+    );
   }
 }
 
