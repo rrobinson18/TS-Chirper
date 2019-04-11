@@ -1,34 +1,37 @@
-# TypeScript Chirper
-The purpose of this lab is to build your "half stack" (frontend, server backend, but no database yet!) Chirper lab. You'll use a React TypeScript frontend with an Express TypeScript backend. The backend will be utilizing chirpsstore.js from the Express API Lab along with your route logic.
+# Chirp It Up, Full Stack Style!
+The purpose of this lab is to take your chirpr schema, connect it to your Chirper Half Stack app, and utilize the database instead of chirpsstore.ts or chirps.json!
 
-## Steps
-### Initial Setup and API
-1. Use the barebones template to get started
-2. Use chirpsstore.js from the Express API Lab. You can leave it as a .js file or convert it to .ts if you wish
-3. Copy over or rewrite the same chirps.js route logic from the Express API Lab to:
-* GET all chirps
-* GET one chirp
-* POST add a new chirp
-* PUT edit a chirp
-* DELETE delete a chirp
-* Note: Convert this to a .ts file and update your require() syntax to import/export if you copy your code over
-4. Make sure all route endpoints work in Postman
-### Frontend
-1. Create a React frontend that uses App.tsx as your main routing component, where your BrowserRouter and Switch should be located
-2. Your Chirper app should show a list of all chirps on the home screen
-3. Your app should have a page with a form to POST new chirps with using an onClick handler on a button element
-4. Each chirp in the list should have a button, Admin Options, that will go to a page that specializes in displaying a single chirp
-5. On the page for a single chirp, you should make a GET request for the specific chirp. Display the chirp information on the page in a pre-filled form (see demo at the bottom of this lab if you're confused). Have a Delete button on the page that will trigger a DELETE request to the API for that chirp. Send the user back to the main page when the chirp is successfully deleted. You should also have an Save Edit button that will trigger a PUT request to the API for that chirp. This should also send the user back to the main page when the chirp is successfully edited
-### Hints
-* Use the Fetch API in your front-end code for making all your API requests (GET, POST, PUT, DELETE)
-* See MDN, specifically "Uploading JSON Data" in the "Making Fetch Requests" section
-* Make sure to use RouteComponentProps from react-router-dom as a generic type in order to access the history and match props on your components that are routed to
-* You will find frontend route params and this.props.match.params to be useful in this lab
-* Recommended frontend paths are as follows:
-* / for the main page that displays the list of chirps and a form
-* /chirp/:id/admin for the page that displays a chirp edit form
-* /chirp/add for the page to add a new chirp
-* Any component that is presented by the Router (e.g. your "pages") will have access to this.props.history. This is necessary to kick off navigation from your code. (in response to something being completed, etc.)
-* this.props.history.push('/something') allows you to navigate to the page that responds to the path /something
-* this.props.history.replace('/something') can be used to navigate to that path, but not keep a record of where we currently are (we are replacing the current browser history entry, with this new page we are going to. This is useful if we don't want someone to be able to click the back button and return to this page)
-* this.props.history.goBack() can be used to navigate back one page in the browser history
+## Required Steps
+### Database
+1. Create a database user named chirprapp
+2. Grant all privileges to your chirpr database.
+Hint: use chirpr.* in the ON part of the GRANT statement.
+### Node
+1. In your chirpr API, use your database to store chirps instead of a file
+2. Install and save the mysql @types/mysql NodeJS package using NPM
+3. Configure your connection using createConnection
+4. In each API method, make the appropriate database call to create, read, update, and delete chirps
+5. Test all the REST API endpoints in Postman to confirm they all work
+### React
+1. Adjust your frontend React components to use the same API endpoints from above to achieve the same functionality it had reading a json file. It should display all chirps, view one chirp, delete or edit that, and the ability to add new chirps.
+## Advanced Steps
+1. Create a table named Mentions with the following fields/columns, if you don't have one already:
+```
+Mentions
+  userid
+  chirpid
+  ```
+2. Create a stored procedure named spUserMentions that returns all chirps a user is mentioned in
+* Parameters: userid
+* The result set should contain: chirpid, chip text, chirp date
+* Tip: be sure to insert some fake mentions so that you can test the procedure!
+3. When a chirp is created, check to see if there are mentions in the chirp text and add it to the database
+* Mentions should be put in chirps with the format @username.
+* Example Chirp: hi @matt it was good to see you in class!
+4. If it does, add a mention to the database as well as the chirp
+* Create a new API method that inserts mentions
+* Hint: You'll have to parse the string and lookup the user by name (use like!)
+* If you don't have a username on your table, you can use userid (i.e. @1 instead of @matt)
+5. Add the ability in your app to click a username and view all of the chirps that user is mentioned in
+* Create a new API method that retrieves chirps that a user is mentioned in
+* Important: There is some creativity that will be needed on your part to put a good interface together that works for this!
