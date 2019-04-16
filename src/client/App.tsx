@@ -33,4 +33,8 @@ export default App;
 
 interface IAppProps {}
 
-interface IAppState {}
+interface IAppState {
+  chirps: {
+    id: number,
+  }[];
+}

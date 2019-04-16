@@ -2,6 +2,7 @@ import React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 
 
+
 export default class AddChirp extends React.Component<IAddChirpProps, IAppChirpState> {
     constructor(props: IAddChirpProps) {
         super(props);
@@ -68,9 +69,7 @@ render() {
 
 
 
-    interface IAddChirpProps extends RouteComponentProps{
-       
-    }
+    interface IAddChirpProps extends RouteComponentProps { }
 
     interface IAppChirpState{
         text: string;

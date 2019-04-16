@@ -2,8 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 
-export default class Card extends React.Component<ICardProps, ICardState> {
-    constructor(props: ICardProps) {
+export default class Chirps extends React.Component<IChirpsProps, IChirpsState> {
+    constructor(props: IChirpsProps) {
         super(props);
 
         this.state = {
@@ -12,7 +12,7 @@ export default class Card extends React.Component<ICardProps, ICardState> {
 }
 
 async componentDidMount() {
-    let r = await fetch("/api/chirps");
+    let r = await fetch("/api/chirpr");
     let data = await r.json();
     let chirps = Object.keys(data).map(key => ({
         id: key,
@@ -47,9 +47,9 @@ render() {
   }
 }
 
-interface ICardProps {}
+interface IChirpsProps {}
 
-interface ICardState {
+interface IChirpsState {
     chirps: { 
         id: string; 
         user: string; 

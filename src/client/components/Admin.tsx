@@ -12,7 +12,7 @@ export default class Admin extends React.Component<IAdminProps, IAdminState> {
         }
     }
 
-    async ComponentDidMount {
+    async ComponentDidMount() {
         try {
             let r = await fetch(`/api/chirps/${this.props.match.params.id}`);
             let chirp: { text: string, user: string } = await r.json();
@@ -67,7 +67,6 @@ render() {
         <div className="container">
             <div className="row my-2">
                 <div className="col-md-12">
-            <h4 className="text-center">Admin for Chirp {this.props.match.params.id}</h4>
                     <form className="form-group p-3 border border-warning rounded">
                         <label>Username: </label>
                         <input

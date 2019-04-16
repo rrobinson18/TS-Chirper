@@ -1,33 +1,41 @@
-import * as express from 'express';
-import * as Chirps from '../../utilites/chirpstore';
+// import * as express from 'express';
+// import * as chirps from '../../utilites/chirpstore';
+// import db from './db';
 
-const router = express.Router();
+// const router = express.Router();
 
-router.get('/:id?', (req, res, next) => {
-    let id = req.params.id;
-    if(id) {
-        res.json(Chirps.GetChirp(id))
-    } else {
-        res.json(Chirps.GetChirps())
-    } 
-});
+// router.get('/:id?', (req, res, next) => {
+//     let id = req.params.id;
+//     if(id) {
+//     db.GetChirp(id).then( results => {
+//         res.send(results);
+//     })
+//     } else {
+//         db.GetChirps().then(results => {
+//             res.send(results);
+//         })
+//     } 
+// });
 
-router.post('/', (req, res, next) => {
-    let chirp = req.body;
-    Chirps.CreateChirp(chirp);
-    res.redirect('/');
-});
+// router.post('/', (req, res, next) => {
+//     db.PostChirp(req.body.text).then(results => {
+//         res.send(results);
+//     })
+// });
 
-router.put('/:id', (req, res, next) => {
-    let id = req.params.id;
-    Chirps.UpdateChirp(id, req.body);
-    res.redirect('/');
-})
+// router.put('/:id/edit', (req, res, next) => {
+//     let id = req.params.id;
+//     db.UpdateChirp(id, req.body.text).then(results => {
+//         res.send(results);
+//     });
+//     res.redirect('/');
+// })
 
-router.delete('/:id', (req, res, next) => {
-    let id = req.params.id;
-    Chirps.DeleteChirp(id);
-    res.sendStatus(200);
-})
+// router.delete('/:id', (req, res, next) => {
+//     let id = req.params.id;
+//     db.DeleteChirp(id).then(results => {
+//         res.send(results);
+//     })
+// });
 
-export default router;
+// export default router;
